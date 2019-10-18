@@ -89,21 +89,21 @@ class DonkeySimMsgHandler(IMesgHandler):
     def predict(self, image_array):
         outputs = self.model.predict(image_array[None, :, :, :])
         self.parse_outputs(outputs)
-    
+
     def parse_outputs(self, outputs):
         res = []
-        for output in outputs:            
+        for output in outputs:
             for i in range(output.shape[0]):
                 res.append(output[i])
 
         self.on_parsed_outputs(res)
-        
+
     def on_parsed_outputs(self, outputs):
         self.outputs = outputs
         self.steering_angle = 0.0
         self.throttle = 0.2
 
-        if len(outputs) > 0:        
+        if len(outputs) > 0:
             self.steering_angle = outputs[self.STEERING]
 
         if self.constant_throttle != 0.0:
@@ -114,7 +114,8 @@ class DonkeySimMsgHandler(IMesgHandler):
         self.send_control(self.steering_angle, self.throttle)
 
     def send_control(self, steer, throttle):
-        msg = { 'msg_type' : 'control', 'steering': steer.__str__(), 'throttle':throttle.__str__(), 'brake': '0.0' }
+        #msg = { 'msg_type' : 'control', 'steering': steer.__str__(), 'throttle':throttle.__str__(), 'brake': '0.0' }
+        msg = { 'msg_type' : 'control', 'steering': "1", 'throttle':".3", 'brake': '0.0' }
         self.sock.queue_message(msg)
 
     def send_regen_road(self, road_style=0, rand_seed=0, turn_increment=0.0):
@@ -130,19 +131,19 @@ class DonkeySimMsgHandler(IMesgHandler):
             'road_style': road_style.__str__(),
             'rand_seed': rand_seed.__str__(),
             'turn_increment': turn_increment.__str__() }
-        
+
         self.sock.queue_message(msg)
 
     def request_another_car(self):
         port = self.port + self.num_cars
         address = ("0.0.0.0", port)
-        
+
         #spawn a new message handler serving on the new port.
         handler = DonkeySimMsgHandler(self.model, 0., num_cars=(self.target_num_cars - 1), port=address[1])
         server = SimServer(address, handler)
 
         msg = { 'msg_type' : 'new_car', 'host': '127.0.0.1', 'port' : port.__str__() }
-        self.sock.queue_message(msg)   
+        self.sock.queue_message(msg)
 
     def on_close(self):
         pass
@@ -154,7 +155,7 @@ def go(filename, address, constant_throttle=0, num_cars=1, image_cb=None, rand_s
 
     #looks like we have to compile it before use. These optimizers don't matter for inference.
     model.compile("sgd", "mse")
-  
+
     #setup the server
     handler = DonkeySimMsgHandler(model, constant_throttle, port=address[1], num_cars=num_cars, image_cb=image_cb, rand_seed=rand_seed)
     server = SimServer(address, handler)

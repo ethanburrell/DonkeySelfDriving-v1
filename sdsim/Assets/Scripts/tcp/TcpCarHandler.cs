@@ -46,7 +46,11 @@ namespace tk
 
         void Awake()
         {
+            //car = carObj.GetComponent<ICar>();
+            // ETHAN CHANGED TO THIS:
+            //car = carObj.GetComponent<Car>();
             car = carObj.GetComponent<ICar>();
+            Debug.Log("Car init");
             client = GetComponent<tk.JsonTcpClient>();
 		    pm = GameObject.FindObjectOfType<PathManager>();
 
@@ -75,6 +79,7 @@ namespace tk
 
         bool Connect()
         {
+            Debug.Log("TCPCarHandler.cs Connect");
             return client.Connect();
         }
 
@@ -135,6 +140,7 @@ namespace tk
 
         void OnControlsRecv(JSONObject json)
         {
+            Debug.Log("Controls REcieved");
             try
             {
                 ai_steering = float.Parse(json["steering"].str, CultureInfo.InvariantCulture.NumberFormat) * car.GetMaxSteering();

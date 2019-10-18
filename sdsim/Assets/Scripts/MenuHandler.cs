@@ -55,8 +55,9 @@ public class MenuHandler : MonoBehaviour {
 	{
 		if(carJSControl != null)
 			carJSControl.SetActive(false);
-		
-		NetworkSteering.SetActive(true);
+
+        NetworkSteering.SetActive(true);
+        Debug.Log("Using Network Steering");
 		menuPanel.SetActive(false);
         stopPanel.SetActive(true);
     }

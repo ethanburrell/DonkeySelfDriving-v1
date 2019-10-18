@@ -32,7 +32,7 @@ namespace tk
         public string nnIPAddress = "127.0.0.1";
         public int nnPort = 9090;
         private tk.TcpClient client;
-
+         
         public tk.Dispatcher dispatcher;
 
         public bool dispatchInMainThread = false;
@@ -49,6 +49,7 @@ namespace tk
             client = GetComponent<tk.TcpClient>();
             
             Initcallbacks();
+            Debug.Log("JScon tcp client awake");
         }
 
         void Initcallbacks()
@@ -58,6 +59,8 @@ namespace tk
 
         public bool Connect()
         {
+            //bool temp = client.Connect(nnIPAddress, nnPort);
+            Debug.Log("Server started");
             return client.Connect(nnIPAddress, nnPort);
         }
 
@@ -84,8 +87,8 @@ namespace tk
         void OnDataRecv(byte[] bytes)
         {
             string str = System.Text.Encoding.UTF8.GetString(bytes);
-            
-            lock(_locker)
+            Debug.Log(str);
+            lock (_locker)
             {
                 recv_packets.Add(str);
             }

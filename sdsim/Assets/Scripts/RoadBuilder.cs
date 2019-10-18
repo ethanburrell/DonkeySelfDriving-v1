@@ -111,6 +111,7 @@ public class RoadBuilder : MonoBehaviour {
 
 		go.tag = "road_mesh";
 
+        // CHUNK THAT GENERATES THE MESH
 		int numQuads = path.nodes.Count - 1;
 		int numVerts = (numQuads + 1) * 2;
 		int numTris = numQuads * 2;
@@ -198,6 +199,7 @@ public class RoadBuilder : MonoBehaviour {
 		}
 
 
+        // sets the mesh?
 		mesh.vertices = vertices;
 		mesh.triangles = tri;
 		mesh.normals = normals;
@@ -206,7 +208,7 @@ public class RoadBuilder : MonoBehaviour {
 		mesh.RecalculateBounds();
 
 
-
+        // this smooths out the terain
 		if(terToolkit != null && doErodeTerrain)
 		{
 			//terToolkit.FastThermalErosion(20, 0.0f, 0.0f); //creates pits
@@ -234,4 +236,5 @@ public class RoadBuilder : MonoBehaviour {
 			//terToolkit.TextureTerrain(slopeStops, heightStops, textures);
 		}
 	}
+    // END CHUCK THAT GENERATES THE MESH
 }
